@@ -45,6 +45,8 @@ VSCode is able to automatically detect and color-code html and JavaScript files.
 
 # JavaScript Fundamentals
 
+## Integration of JavaScript into HTML
+
 In many applications, JavaScript is commonly "attached" in html files, where `<script></script>` is used to wrap the JavaScript code. The browser shall be able to comprehend the content of the JavaScript code when loading the web page. An example is given below.
 ```html
 <!DOCTYPE html>
@@ -55,7 +57,7 @@ In many applications, JavaScript is commonly "attached" in html files, where `<s
     <script>
       let js = 'flag';
       if (js === 'flag')
-        alert("Welcome to JavaScript!")
+        alert("Welcome to JavaScript!");
     </script>
   </head>
   <body>
@@ -64,12 +66,64 @@ In many applications, JavaScript is commonly "attached" in html files, where `<s
 </html>
 ```
 where
-```js
+```html
 <script>
     let js = 'flag';
     if (js === 'flag')
-    alert("Welcome to JavaScript!")
+    alert("Welcome to JavaScript!");
 </script>
 ```
 is a piece of JavaScript code integrated into the html file. This should pop up an alert message that says "Welcome to JavaScript!" each time the page is refreshed.
+
+When the JavaScript code becomes complicated, it is often more convenient to save the script in a separate file than using the inline script, and call that script in the html file. As an example, create a file `script.js` under the same folder with the html file as follows.
+```js
+let js = 'amazing';
+if (js === 'amazing')
+  alert("Welcome to JavaScript!");
+```
+In the html file, use
+```html
+<script src="script.js"></script>
+```
+to replace the inline script. It should work all the same.
+
+## JavaScript Comments
+
+Use
+```js
+// comment
+```
+for single-line comments, and
+```js
+/*
+comment
+comment
+comment
+*/
+```
+for multiple-line comments.
+
+## JavaScript Variables
+
+The syntax of declaring a variable and assigning a value to the variable is
+```js
+let <variableName> = <val>;
+```
+where `val` is the value assigned to the variable. There are many data types defined in JavaScript, to name a few, string `'apple'`, `"apple"`, or numeric number `0`, `100`, `0.5`. More will be introduced later. 
+
+Notice that JavaScript uses camelCase notation to name variables (and UPPERCASE notion for constants) as a convention. Like many other languages, JavaScript reserved keywords cannot be used as variable names.
+
+The following table summarizes the commonly used primitive data types.
+
+| Data Type | Explanation | Example |
+| :-------- | :---------- | :------ |
+| Number | Floating point numerical numbers, both integers and decimals. | `let var = 1;` |
+| String | Sequence of characters. | `let var = "apple";` |
+| Boolean | Logic true or false. | `let var = true;` |
+| Undefined | Empty value. | `let var;` |
+| Null | Empty value, used in different circumstances from undefined value. | |
+| Symbol | Unique and static value. | |
+| BigInt | Big integer value. | |
+
+JavaScript uses dynamic typing. A variable can be assigned with value without declaring the data type in advance.
 

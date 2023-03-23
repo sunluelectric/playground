@@ -127,3 +127,17 @@ The following table summarizes the commonly used primitive data types.
 
 JavaScript uses dynamic typing. A variable can be assigned with value without declaring the data type in advance.
 
+Use `typeof` followed by a variable to return its type. For example,
+```js
+let x = 3;
+typeof x;
+```
+the second line of the above code would return a string that says `"number"`. If `x` is assigned with another value of a different data type, the `typeof` return would also change. An example is given below.
+```js
+let x = 3;
+typeof x; // return "number"
+x = true;
+typeof x; // return "boolean"
+```
+
+Notice that in a program block, `let` is used only in the first instance when the variable is declared. It is not allowed to use `let` to declare multiple variables with the same name, or to update variables.

@@ -202,3 +202,188 @@ const fullName = lastName + " " + fullName;
 ```
 
 The operators can be using in a nested manner, in which case the sequence with which operators are executed follows the pre-defined operator precedence. Details are given [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence).
+
+## Template Literals for String Operation
+
+To form a string with variables integrated inside, using string concatenate `+` can be inconvenient, especially when managing the spaces. The template literals can be used to handle this problem. An example is given below.
+
+```js
+let x = 10;
+let y = 20;
+let msg =
+  "The values of x and y are " +
+  x +
+  " and " +
+  y +
+  ", respectively. \n The sum is " +
+  (x + y) +
+  ".";
+```
+
+Alternatively, consider using template literals as follows. It simplifies integrating of variables, calculations, and line switches in a string.
+
+```js
+let x = 10;
+let y = 20;
+let msg = `The values of x and y are ${x} and ${y}, respectively. 
+The sum is ${x + y}.`;
+```
+
+Notice that to use template literals, use \` to quote the string instead of the regular quotation marks. There are developers using \` for any string any way, regardless of whether template literals are used.
+
+## Type Conversion and Coercion
+
+Values of different types might be converted from one type to another. For example, a string `'1991'` can be converted to number `1991`. The developer may manually convert the data using functions, in which case it is called a "conversion", or the JavaScript interpreter may do that conversion automatically behind the screen in some operations, in which case it is called a "coercion".
+
+An example of conversion and coercion is given below.
+
+```js
+let x = "1991";
+let y = x + 1992; // y is a string says '19911992'
+let z = Number(x) + 1992; // z is a number of 3983;
+```
+
+where in calculating `y`, JavaScript converts number `1992` into a string `'1992'` by coercion, then concatenate it with string `x` to get `19911992`. In calculating `z`, string `x` is first converted into number `1991`, then added with another number `1992` to get `3983`.
+
+Use `Number()` to convert a string to a number. In the case where the string does not make sense, `NaN` is returned. Use `String()` to convert a number to a string.
+
+Notice that though data coercion is convenient, it is sometimes not very intuitive. Examples are given below.
+
+```js
+let x;
+x = "1991" + "1992"; // string, '19911992'
+x = "1991" + 1992; // string, '19911992'
+x = "1991" - "1992"; // number, -1
+x = "1991" - 1992; // number, -1
+```
+
+Apparently, JavaScript is taking `+` as string concatenate operator over arithmetic operator, and numbers are converted into strings. When comes to `-`, since there is no corresponding string operator, it is treated as an arithmetic operator, and strings are converted into numbers.
+
+Variables of other types can be converted to boolean type using `Boolean()`. Boolean coercion also happens frequently wherever an IF statement is used.
+
+Only the following values are converted to `false`, and everything else would become `true`. They are: `0`, `''` (empty string), `undefined`, `null`, and `NaN`. Notice that empty object `{}` is converted to true. More about object is introduced in later part of the notebook.
+
+## IF Statement
+
+The control structure syntax of using an IF statement is shown below.
+
+```js
+if (<expression>) {
+  <statement>;
+  <statement>;
+} else if {
+  <statement>;
+  <statement>;
+} else {
+  <statement>;
+  <statement>;
+}
+```
+
+In case where there is only one line of command in the code block in the IF statement, the curly bracket is not required.
+
+In the above, `<expression>` a series of comparison operation formed by `==` (loose equality), `!=`(loose inequality), `===` (strong equality), `!==` (strong inequality), `>`, `<`, `>=`, `<=`. It is also possible to use a variable as the condition, in which case JavaScript will convert `<expression>` to a boolean variable using coercion. It is worth mentioning the difference between strong (in)equality and loose (in)equality. The loose (in)equality does data coercion before comparison. An example is given below.
+
+```js
+1991 === 1991; // true
+"1991" === "1991"; // true
+"1991" === 1991; // false, as they are of different data types
+"1991" == 1991; // true, they are identical after coercion
+```
+
+In practice, use strong (in)equality wherever possible over loose (in)equality.
+
+Notice that any variable declared inside a code block, in this case, `{}`, cannot be interacted from outside. The variable needs to be defined outside. An example is given below.
+
+```js
+let a = prompt("Input a number: ");
+a = Number(a);
+if (a) {
+  let b = a;
+} else {
+  let b = "a joke";
+}
+alert(`You input ${b}. A good choice!`); // this would not work; b is not defined outsize the code block
+```
+
+Instead, use
+
+```js
+let a = prompt("Input a number: ");
+a = Number(a);
+let b;
+if (a) {
+  // if a is a non-zero numeric number
+  b = a;
+} else {
+  b = "a joke";
+}
+alert(`You input ${b}. A good choice!`); // this works
+```
+
+Notice that `prompt()` prompts a window from where the user can input something. The input from the user is converted into a string.
+
+Use `&&` (AND), `||` (OR), `!` (NOT) to connect statements if necessary. An example is given below.
+
+```js
+const age = 18;
+const eyeSight = true;
+if (age >= 18 && eyeSight) {
+  alert(`You can drive.`);
+} else {
+  alert(`You cannot drive.`);
+}
+```
+
+## SWITCH Statement
+
+SWITCH statement can be regarded as a special case of IF statement. The control structure syntax is given below. SWITCH uses strong equality "`===`" to check values.
+
+```js
+switch (<variable>) {
+  case <value-1>:
+    <statement>; // execute if <variable> === <value-1>
+    <statement>;
+    break; // break is important
+  case <value-2>:
+  case <value-3>:
+    <statement>; // if either <value-2> or <value-3> values match
+    <statement>;
+    break; // break is important
+  default:
+    <statement>;
+    <statement>;
+}
+```
+
+Notice that `break` is important after each (group) of case statement. Without `break`, the program would keep executing all the remaining commands, regardless of the remaining case checks results. In other words, if one of the case checks passes, it will bypass all remaining case checks and execute all the remaining commands until its end or when there is a `break`.
+
+SWITCH statement is getting less used than before, as there are more and more ways to walk around.
+
+## Conditional Operator
+
+Conditional operator works like a lite version of the IF statement. The syntax is given below.
+
+```js
+<expression> ? <statement-or-expression-1> : <statement-or-expression-2>
+```
+
+The above line of code either execute a statement, or return an expression. An example is given below.
+
+```js
+let income = prompt("Enter the income:");
+income = Number(income);
+let tax =
+  income <= 5000
+    ? 0
+    : income <= 10000
+    ? 0.05 * (income - 5000)
+    : income <= 20000
+    ? 0.05 * 5000 + 0.1 * (income - 10000)
+    : 0.05 * 5000 + 0.1 * 10000 + 0.2 * (income - 20000);
+alert(
+  `The income including tax is ${income}. The tax is ${tax}. The income excluding tax is ${
+    income - tax
+  }.`
+);
+```

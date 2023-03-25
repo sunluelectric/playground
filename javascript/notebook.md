@@ -406,7 +406,7 @@ To enable strict mode, in the very first line of the JavaScript, use
 
 ## Function
 
-Functions are one of the most important building blocks of all modern programming languages. It allows reuse of codes, hence making the program efficient to program, easy to read, and at the same time reducing program storage space.
+Functions are one of the most important building blocks of all modern programming languages. It allows reuse of codes, hence making the program efficient to program and easy to read. It also avoids repeatedly saving the same code in the storage.
 
 The basic syntax of defining a function is as follows. The input list and return are optional.
 
@@ -417,3 +417,4 @@ function <function-name>(input1, input2) {
   return <expression>;
 }
 ```
+ 

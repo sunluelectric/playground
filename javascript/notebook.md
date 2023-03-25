@@ -16,6 +16,8 @@ JavaScript is a high-level object-oriented computer programming language. It is 
 
 For example, consider a web page. HTML records the content of the web page, while CSS determines the presentation of the content. JavaScript is the actual logics integrated into the web page which makes it not only a static poster but a interactive application with data transmission. For example, JavaScript can respond to the button clicks on the web page, retrieve data from a remote server, and subsequently display the data on the in a dynamic manner.
 
+A new version of JavaScript is released every year, with the release name "ES20XX" where "XX" is the release year. JavaScript has a well designed backwards compatible compatible, which means an old JavaScript program can always run on a new browser. The reverse is not true.
+
 # JavaScript Runtime Setup
 
 ## Browser-Based JavaScript Runtime
@@ -386,4 +388,32 @@ alert(
     income - tax
   }.`
 );
+```
+
+Notice that the above usage of conditional operator is not a good practice, since it makes the code different to read. The example is just an example to illustrate how it can be interpreted as an expression.
+
+## Strict Mode
+
+By activating strict mode, JavaScript forbids particular actions or operations in the script, and pop up error message for any suspicious-looking code which, if were in the normal mode, would stay silence until the script fails. It helps with good programming practice and easy debugging.
+
+For example, strict mode enforce declaring a variable (using `let`, for example) before updating one. It thus helps to pick up variables without initially declared probably due to mistyping. It also reserves words such as `interface`, `private`, that should not be used to name common variables in a good practice.
+
+To enable strict mode, in the very first line of the JavaScript, use
+
+```js
+"use strict";
+```
+
+## Function
+
+Functions are one of the most important building blocks of all modern programming languages. It allows reuse of codes, hence making the program efficient to program, easy to read, and at the same time reducing program storage space.
+
+The basic syntax of defining a function is as follows. The input list and return are optional.
+
+```js
+function <function-name>(input1, input2) {
+  <statement>;
+  <statement>;
+  return <expression>;
+}
 ```

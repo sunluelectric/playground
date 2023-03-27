@@ -49,8 +49,6 @@ Microsoft Visual Studio Code (VSCode) is a very powerful and flexible text and p
 
 VSCode is able to automatically detect and color-code html and JavaScript files.
 
-# JavaScript Fundamentals
-
 ## Integration of JavaScript into HTML
 
 In many applications, JavaScript is commonly "attached" in html files, where `<script></script>` is used to wrap the JavaScript code. The browser shall be able to comprehend the content of the JavaScript code when loading the web page. An example is given below.
@@ -98,6 +96,18 @@ In the html file, use
 
 to replace the inline script. It should work all the same.
 
+## Strict Mode
+
+By activating strict mode, JavaScript forbids particular actions or operations in the script, and pop up error message for any suspicious-looking code which, if were in the normal mode, would stay silence until the script fails. It helps with good programming practice and easy debugging.
+
+For example, strict mode enforce declaring a variable (using `let`, for example) before updating one. It thus helps to pick up variables without initially declared probably due to mistyping. It also reserves words such as `interface`, `private`, that should not be used to name common variables in a good practice.
+
+To enable strict mode, in the very first line of the JavaScript, use
+
+```js
+"use strict";
+```
+
 ## JavaScript Comments
 
 Use
@@ -118,7 +128,9 @@ comment
 
 for multiple-line comments.
 
-## JavaScript Variables
+# JavaScript Variables and Operators
+
+## Variables
 
 The syntax of declaring a variable and assigning a value to the variable is
 
@@ -179,7 +191,7 @@ let age;
 age = 2023 - 1991;
 ```
 
-## JavaScript Operators
+## Operators
 
 Arithmetic operators are supported in JavaScript. Examples are given below.
 
@@ -264,6 +276,9 @@ Apparently, JavaScript is taking `+` as string concatenate operator over arithme
 Variables of other types can be converted to boolean type using `Boolean()`. Boolean coercion also happens frequently wherever an IF statement is used.
 
 Only the following values are converted to `false`, and everything else would become `true`. They are: `0`, `''` (empty string), `undefined`, `null`, and `NaN`. Notice that empty object `{}` is converted to true. More about object is introduced in later part of the notebook.
+
+
+# Control Structure
 
 ## IF Statement
 
@@ -392,29 +407,57 @@ alert(
 
 Notice that the above usage of conditional operator is not a good practice, since it makes the code different to read. The example is just an example to illustrate how it can be interpreted as an expression.
 
-## Strict Mode
+# Functions
 
-By activating strict mode, JavaScript forbids particular actions or operations in the script, and pop up error message for any suspicious-looking code which, if were in the normal mode, would stay silence until the script fails. It helps with good programming practice and easy debugging.
+Functions are one of the most important building blocks of all modern programming languages. It allows reuse of codes, hence making the program efficient to program and easy to read. It also avoids repeatedly saving the same code in the storage. 
 
-For example, strict mode enforce declaring a variable (using `let`, for example) before updating one. It thus helps to pick up variables without initially declared probably due to mistyping. It also reserves words such as `interface`, `private`, that should not be used to name common variables in a good practice.
-
-To enable strict mode, in the very first line of the JavaScript, use
+Regular **function declaration**, **anonymous function expression**, and **array function** are introduced. The basic syntax of defining a function is as follows. The input list and return are optional.
 
 ```js
-"use strict";
-```
-
-## Function
-
-Functions are one of the most important building blocks of all modern programming languages. It allows reuse of codes, hence making the program efficient to program and easy to read. It also avoids repeatedly saving the same code in the storage.
-
-The basic syntax of defining a function is as follows. The input list and return are optional.
-
-```js
-function <function-name>(input1, input2) {
+function <function-name>(<input1>, <input2>) {
   <statement>;
   <statement>;
   return <expression>;
 }
 ```
+The above is called a function declaration. A function can be called both before and after its associated function declaration.
  
+Define an anonymous function as fellows.
+
+```js
+ const <function-name> = function (<input1>, <input2>) {
+  <statement>;
+  <statement>;
+  return <expression>;
+ }
+```
+
+The above is called a function expression. It allows to store a function into a "variable". A function can be called after the function expression variable is defined.
+
+Define an array function as follows.
+
+```js
+const <function-name> = <input1> => <expression>
+```
+In the case where there are multiple inputs, use `(<input1>, <input2>)` instead. The bracket is required in this case.  
+
+Examples of an array function is given below.
+```js
+const calculateAge = birthYear => 2023 - birthYear;
+const age = calculateAge(1991); // age = 32
+const calculateUntilRetirement = birthYear => {
+  const age = 2023 - birthYear;
+  const retirement = 65 - age;
+  return retirement;
+}
+const tillRetirement = calculateUntilRetirement(1991); // tillRetirement = 33
+```
+
+# Data Structure
+
+## Array
+
+
+
+
+

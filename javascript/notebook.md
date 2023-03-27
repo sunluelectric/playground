@@ -277,6 +277,266 @@ Variables of other types can be converted to boolean type using `Boolean()`. Boo
 
 Only the following values are converted to `false`, and everything else would become `true`. They are: `0`, `''` (empty string), `undefined`, `null`, and `NaN`. Notice that empty object `{}` is converted to true. More about object is introduced in later part of the notebook.
 
+# Functions
+
+Functions are one of the most important building blocks of all modern programming languages. It allows reuse of codes, hence making the program efficient to program and easy to read. It also avoids repeatedly saving the same code in the storage.
+
+Regular **function declaration**, **anonymous function expression**, and **array function** are introduced. The basic syntax of defining a function is as follows. The input list and return are optional.
+
+```js
+function <function-name>(<input1>, <input2>) {
+  <statement>;
+  <statement>;
+  return <expression>;
+}
+```
+
+The above is called a function declaration. A function can be called both before and after its associated function declaration.
+
+Define an anonymous function as fellows.
+
+```js
+ const <function-name> = function (<input1>, <input2>) {
+  <statement>;
+  <statement>;
+  return <expression>;
+ }
+```
+
+The above is called a function expression. It allows to store a function into a "variable". A function can be called after the function expression variable is defined.
+
+Define an array function as follows.
+
+```js
+const <function-name> = <input1> => <expression>
+```
+
+In the case where there are multiple inputs, use `(<input1>, <input2>)` instead. The bracket is required in this case.
+
+Examples of an array function is given below.
+
+```js
+const calculateAge = (birthYear) => 2023 - birthYear;
+const age = calculateAge(1991); // age = 32
+const calculateUntilRetirement = (birthYear) => {
+  const age = 2023 - birthYear;
+  const retirement = 65 - age;
+  return retirement;
+};
+const tillRetirement = calculateUntilRetirement(1991); // tillRetirement = 33
+```
+
+# Data Structure
+
+Array and object are the most important data structures in JavaScript. They are introduced as follows.
+
+## Array
+
+Define an array as follows.
+
+```js
+<array> = [<variable>, <variable>];
+```
+
+Examples are given below.
+
+```js
+const friend1 = "Michael";
+const friend2 = "Steven";
+const friend3 = "Peter";
+const friendArray = [friend1, friend2, friend3]; // array of string
+const ageArray = [21, 23, 19]; // array of number
+```
+
+It is possible to declare an empty array by assigning value `[]`. The elements can be added later.
+
+To access an array, use `<array>[<index>]`, which can be used to either return an element value, or to update that element. The index starts from 0. The length of an array is given by its property `.length`. For example,
+
+```js
+const ageArray = [21, 23, 19];
+const firstAge = ageArray[0]; // returns 21
+const lengthAge = ageArray.length; // returns 3
+const lastAge = ageArray[lengthAge - 1]; // returns 19
+```
+
+Array is mutable. Even if an array is declared `const`, the value of its element can be changed. However, the array of the same name cannot be reclaimed. An example is given below.
+
+```js
+const ageArray = [21, 23, 19];
+ageArray[2] = 29; // ageArray = [21, 23, 29]
+```
+
+Array can have mixed data types. An array by itself can be an element of another array. An example is given below.
+
+```js
+const ageArray = [21, 23, 19];
+const arrayExpand = [28, 16, 31, ageArray, "John"]; // arrayExpand = [28, 16, 31, Array(3), 'John']
+```
+
+Notice that the calculation involving number array may not function as expected in other languages such as Python. For example, `<number>+<array>` would populate that number and add it to each and every element in the array in Python. But it does not work like that in JavaScript. Instead, each element in the array needs to be handled independently.
+
+## Array Methods
+
+To add an element to the end an array, use `.push(<variable>)` method. To add it to the beginning of an array, use `.unshift(<variable>)`. These method returns the new length of the array. An example is given below.
+
+```js
+const x = [1, 2, 3, 4, 5];
+let newLength = x.push(6); // x = [1,2,3,4,5,6]; newLength = 6
+newLength = x.unshift(0); // x = [0,1,2,3,4,5,6]; newLength = 7
+```
+
+To remove the last element, use `.pop()`. To remove from the beginning of the array, use `.shift()`. They return the removed element.
+
+To search for the index of an element, use `.indexOf(<element>)`. An example is given below.
+
+```js
+const x = [1, 2, 3, 4, 5];
+x.indexOf(3); // 2, because x[2] = 3
+x.indexOf(10); // -1, when not found
+x.push(3);
+x.indexOf(3); // 2, because x[2] = 3 is its first appearance
+```
+
+To simply check whether element exists in an array, use `.include(<element>)`, which will return a boolean value. Strong equality is required in the comparison. An example is given below.
+
+```js
+const x = [1, 2, 3, 4, 5];
+x.include(1); // true
+x.include("5"); // false
+```
+
+## Object
+
+Object is one of the main data structures used in JavaScript. In some sense, array can also be taken as a special type of object.
+
+JavaScript uses "key-value" pairs to store data in a regular object. The syntax follows JavaScript Object Notation (JSON), which is shown below. Notice that there are other ways to create JavaScript objects.
+
+```js
+const <object> = {
+  key: value,
+  key: value
+}
+```
+
+An example of defining an object is given below.
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  school: "Gryffindor",
+};
+```
+
+Then use `<object>.<property>` or `<object>[<'property'>]` to access the property of an object, where the dot "`.`" is in fact an operator. For example,
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  school: "Gryffindor",
+};
+harryPotter.school; // 'Gryffindor'
+harryPotter["school"]; // 'Gryffindor'
+harryPotter.teacher; // undefined, as this property is not defined
+harryPotter["teacher"]; // undefined, as this property is not defined
+```
+
+The above can be used to update or add new properties to an existing object.
+
+## Object Methods
+
+Object can have properties of different value types, array, other objects, and even functions. To add a function as a property to an object, use the function name as the key, and the expression of the function as the value. An example is given below.
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  birthYear: 1980,
+  calculateAge: function (currentYear) {
+    return currentYear - 1980;
+  },
+};
+harryPotter.calculateAge(2023); // returns 43
+```
+
+It is possible to use the defined property in the function as well. An example is given below. Notice that `this` is used to refer to the current object being initialized in a function. It is also possible to add new properties to the object from its function using `this`.
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  birthYear: 1980,
+  calculateAge: function (currentYear) {
+    this.age = currentYear - this.birthYear;
+    return this.age;
+  },
+};
+harryPotter.age; // return undefined
+harryPotter.calculateAge(2023); // returns 43
+harryPotter["calculateAge"](2023); // return 43
+harryPotter.age; // return 43
+```
+
+However, the same does not apply to property definition. For example, the following code would not work.
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  birthYear: 1980,
+  fullName: firstName + " " + lastName, // error; firstName and lastName are not defined
+  calculateAge: function (currentYear) {
+    return currentYear - this.birthYear;
+  },
+};
+```
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  birthYear: 1980,
+  fullName: this.firstName + " " + this.lastName, // fullName = "undefined undefined"
+  calculateAge: function (currentYear) {
+    return currentYear - this.birthYear;
+  },
+};
+```
+
+The correct way is as follows.
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  birthYear: 1980,
+  calculateAge: function (currentYear) {
+    return currentYear - this.birthYear;
+  },
+};
+harryPotter.fullName = harryPotter.firstName + " " + harryPotter.lastName;
+harryPotter.fullName; // "Harry Potter"
+```
+
+Or alternatively,
+
+```js
+const harryPotter = {
+  firstName: "Harry",
+  lastName: "Potter",
+  birthYear: 1980,
+  calculateAge: function (currentYear) {
+    this.age = currentYear - this.birthYear;
+    return this.age;
+  },
+  calculateFullName: function () {
+    this.fullName = this.firstName + " " + this.lastName;
+  },
+};
+harryPotter.calculateFullName();
+harryPotter.fullName; // "Harry Potter"
+```
 
 # Control Structure
 
@@ -407,57 +667,189 @@ alert(
 
 Notice that the above usage of conditional operator is not a good practice, since it makes the code different to read. The example is just an example to illustrate how it can be interpreted as an expression.
 
-# Functions
+## FOR Loop
 
-Functions are one of the most important building blocks of all modern programming languages. It allows reuse of codes, hence making the program efficient to program and easy to read. It also avoids repeatedly saving the same code in the storage. 
-
-Regular **function declaration**, **anonymous function expression**, and **array function** are introduced. The basic syntax of defining a function is as follows. The input list and return are optional.
+FOR loop is widely used when there is a fixed number of iterations to iterate, for example, when looping among all the elements in an array. The syntax of the FOR loop is given below.
 
 ```js
-function <function-name>(<input1>, <input2>) {
+for (let <counter>=<initial-value>; <condition>; <progress>) {
   <statement>;
   <statement>;
-  return <expression>;
 }
 ```
-The above is called a function declaration. A function can be called both before and after its associated function declaration.
- 
-Define an anonymous function as fellows.
+
+where before each iteration, `<condition>` is checked, and `<progress>` is where the counter is updated after each iteration. An example is given below.
 
 ```js
- const <function-name> = function (<input1>, <input2>) {
-  <statement>;
-  <statement>;
-  return <expression>;
- }
-```
-
-The above is called a function expression. It allows to store a function into a "variable". A function can be called after the function expression variable is defined.
-
-Define an array function as follows.
-
-```js
-const <function-name> = <input1> => <expression>
-```
-In the case where there are multiple inputs, use `(<input1>, <input2>)` instead. The bracket is required in this case.  
-
-Examples of an array function is given below.
-```js
-const calculateAge = birthYear => 2023 - birthYear;
-const age = calculateAge(1991); // age = 32
-const calculateUntilRetirement = birthYear => {
-  const age = 2023 - birthYear;
-  const retirement = 65 - age;
-  return retirement;
+for (let counter = 0; counter < 10; counter++) {
+  console.log(
+    `This is the ${counter}${
+      counter === 1
+        ? `-st`
+        : counter === 2
+        ? `-nd`
+        : counter === 3
+        ? `-rd`
+        : `-th`
+    } time that this command is executed!`
+  );
 }
-const tillRetirement = calculateUntilRetirement(1991); // tillRetirement = 33
 ```
 
-# Data Structure
+Another example to loop in an array is given below.
 
-## Array
+```js
+const x = [1, 2, 3, 4, 5];
+for (let counter = 0; counter < x.length; counter++) {
+  console.log(`The ${counter + 1}-th element in array x is ${x[counter]}.`);
+}
+```
 
+Keywords `continue` and `break` can be used to interrupt the loop control structure.
 
+## WHILE Loop
 
+The syntax of the WHILE loop is given below.
 
+```js
+while (<condition>) {
+  <statement>;
+  <statement>;
+}
+```
 
+As WHILE loop checks the condition alone, it is more flexible than a FOR loop from technical perspective. The "hidden" counter needs to be manually designed by the developer. The developer shall avoid infinite loop, that may be introduced by a WHILE loop. Use `break` wisely to exit the loop when needed.
+
+Loops can be integrated into another loop, resulting multilayer loops. Notice that a deep looping control structure can significantly prolong the computational time of the program.
+
+# Appendix
+
+## Brief Introduction to HTML
+
+HTML refers to HyberTest Markup language. A basic HTML file shall follow the structure below as a template. Pairs of flags `<flag></flag>` are used to hold the content of the HTML file, and they are organized in a nested way.
+
+```html
+<html>
+  <head>
+    <title>This is the title of the page</title>
+  </head>
+  <body>
+    <h1>This is the heading</h1>
+    <p>This is a paragraph.</p>
+    <p>This is another html.</p>
+    <h2>This is a section title</h2>
+    <h3>This is a sub section title</h3>
+    <p>This is yet another paragraph</p>
+  </body>
+</html>
+```
+
+Attributes can be assigned to a flag to provide more information or give more details to that flag. Different flags require different attributes. An example of creating a link using flag `<a>` and attribute `href` is given below.
+
+```html
+<a href="https://www.google.com"></a>
+```
+
+Another example is given below that uses attributes to integrate an image into the page.
+
+```html
+<img
+  src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+/>
+```
+
+Notice that an image flag does not have a close pair.
+
+HTML uses classes and IDs to name elements. The name can later be used to select and pass an element to CSS, which further defines its style and presentation. An example is given below.
+
+```html
+<p class="first-paragraph">This is the first paragraph.</p>
+<p class="second-paragraph">This is the second paragraph.</p>
+<form id="your-name">
+  <h2>List of Names</h2>
+  <p>Input your name here:</p>
+  <input type="text" placeholder="Your Name" />
+  <button>Confirm</button>
+</form>
+```
+
+## CSS
+
+Cascading Style Sheets is a programming language that is often integrated into the HTML file HEAD section, which determines the styles and presentations of the web page. An example is given below.
+
+```html
+<html>
+  <head>
+    <style>
+      body {
+        background-color: green;
+      }
+    </style>
+    <title>This is the title of the page</title>
+  </head>
+  <body>
+    <h1>This is the h1 heading</h1>
+    <p>
+      This is a link to
+      <a href="https://www.google.com">google</a>.
+    </p>
+    <p>
+      This is an image:
+      <img
+        src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+      />
+    </p>
+    <p class="first-paragraph">This is the first paragraph.</p>
+    <p class="second-paragraph">This is the second paragraph.</p>
+    <form id="your-name">
+      <h2>Registration</h2>
+      <p>Input your name here:</p>
+      <input type="text" placeholder="Your Name" />
+      <button>Confirm</button>
+    </form>
+  </body>
+</html>
+```
+
+where everything in `<style></style>` is in CSS. Just like JavaScript, CSS can be made inline to the HTML file, or can be given in a separate CSS file as follows. Create a file `style.css` as follows.
+
+```css
+body {
+  background-color: rgb(218, 218, 184);
+  font-family: Arial;
+}
+```
+
+Then replace the HTML with
+
+```html
+<html>
+  <head>
+    <link href="style.css" rel="stylesheet" />
+    <title>This is the title of the page</title>
+  </head>
+  <body>
+    <h1>This is the h1 heading</h1>
+    <p>
+      This is a link to
+      <a href="https://www.google.com">google</a>.
+    </p>
+    <p>
+      This is an image:
+      <img
+        src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+      />
+    </p>
+    <p class="first-paragraph">This is the first paragraph.</p>
+    <p class="second-paragraph">This is the second paragraph.</p>
+    <form id="your-name">
+      <h2>Registration</h2>
+      <p>Input your name here:</p>
+      <input type="text" placeholder="Your Name" />
+      <button>Confirm</button>
+    </form>
+  </body>
+</html>
+```
+
+It should work all the same as the inline formulation.

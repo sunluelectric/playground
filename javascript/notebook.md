@@ -722,6 +722,279 @@ As WHILE loop checks the condition alone, it is more flexible than a FOR loop fr
 
 Loops can be integrated into another loop, resulting multilayer loops. Notice that a deep looping control structure can significantly prolong the computational time of the program.
 
+# JavaScript Interaction with HTML
+
+So far the basic syntax of JavaScript has been introduced, including defining variables, integrating conditional operators and loops, and pop up messages to the browser developer console using `console.log("<message>")`. In this sense, JavaScript can be used as a general programming language for simple logics, for example, to calculate Fibonacci series.
+
+However, it is not clear by now how JavaScript can interact with elements in HTML file, such as a button, to create an interactive web page. This section focuses on introducing such interactions. Examples are used to illustrate the ideas.
+
+## Simple Example 1: Calculate SUM of Two Variables
+
+The web page shall generate two integers between 0 to 99. The user fills in the sum of the two integers, and click a submit button. The web page checks the result, and tells the user whether the calculation is correct or not. The web page allows the user to repeat the above procedure. The web page stores the "score" which is the largest number of consecutive correct answer. The user can change question if it is too difficult, in which case one point will be subtracted from the score.
+
+The example contains 3 files, an HTML file `index.html`, a CSS file `style.css`, and a JavaScript file `script.js`. Notice that HTML and CSS are not our focus in this project. The HTML and CSS files used in this example are given below.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Calculate SUM of Two Numbers!</title>
+  </head>
+  <body>
+    <header>
+      <h1>Calculate the SUM!</h1>
+    </header>
+    <main>
+      <p class="question">
+        Calculate the SUM of the two numbers below, and verify your answer by
+        clicking the SUBMIT buttom...
+      </p>
+      <p class="equation">
+        <span class="first-number">0</span> +
+        <span class="second-number">0</span> =
+        <input type="number" class="result" />
+      </p>
+      <p>
+        <button class="btn-submit">SUBMIT</button>
+      </p>
+      <p><button class="btn-changequestion">Try another question</button></p>
+      <p class="message">Good luck!</p>
+      <p>Score: <span class="score">0</span></p>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
+```
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  font-family: Arial;
+  font-size: 20px;
+  padding: 10px;
+}
+
+p {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.question {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.equation {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.btn-submit {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.btn-changequestion {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.message {
+  font-size: 20px;
+  padding: 10px;
+}
+```
+
+Just like CSS connects to the HTML elements using sector names, class and IDs, JavaScript connects to HTML elements using Document Object Model (DOM). With DOM, JavaScript can interact with the HTML elements, reading data from the input editable text blocks, responding to button pushes, and changing the displaying contents or CSS styles accordingly, hence a dynamic web page.
+
+DOM is created when the browser loads the HTML file. The elements of the HTML are organized in a tree structure that looks like the following.
+
+```mermaid
+  graph TD;
+      DOCUMENT-->ELEMENT/HTML;
+      ELEMENT/HTML-->ELEMENT/HTML-HEAD;
+      ELEMENT/HTML-->ELEMENT/HTML-BODY;
+      ELEMENT/HTML-HEAD-->ELEMENT/HTML-HEAD-TITLE;
+      ELEMENT/HTML-HEAD-TITLE-->TEXT/HTML-HEAD-TITLE-;
+      ELEMENT/HTML-BODY-->ELEMENT/HTML-BODY-S1;
+      ELEMENT/HTML-BODY-->ELEMENT/HTML-BODY-S2;
+      ELEMENT/HTML-BODY-S1-->ELEMENT/HTML-BODY-S1-P1;
+      ELEMENT/HTML-BODY-S1-P1-->TEXT/HTML-BODY-S1-P1;
+      ELEMENT/HTML-BODY-S1-->ELEMENT/HTML-BODY-S1-P2;
+      ELEMENT/HTML-BODY-S1-P2-->TEXT/HTML-BODY-S1-P2;
+      ELEMENT/HTML-BODY-S2-->ELEMENT/HTML-BODY-S2-P1;
+      ELEMENT/HTML-BODY-S2-P1-->TEXT/HTML-BODY-S2-P1;
+      ELEMENT/HTML-BODY-S2-P1-->ELEMENT-HTML-BODY-S2-P1-A1;
+      ELEMENT-HTML-BODY-S2-P1-A1-->TEXT-HTML-BODY-S2-P1-A1;
+```
+
+All the elements in the HTML file, being the header, the title, the paragraphs, etc., are abstracted into "ELEMENT" in DOM. JavaScript can interact with these elements by finding the associated ELEMENT in the DOM, and change its contents or attributes.
+
+For example, to change the `.message` content from "Good luck!" to "Well done!", use the following in the JavaScript program
+
+```js
+document.querySelector(".message").textContent = "Well done!";
+```
+
+In this line of JavaScript code, `document.querySelector(".message")` uses the web API `querySelector` provided by the browser DOM to locate the element, and changes its text content via attribute `textContent` of the element. By doing the above, JavaScript overwrites the "Good luck!" message and change it to "Well done!", then displayed it on the web page.
+
+Different elements have different attributes. For example, for the editable text input box, the value of the box is given by `value`.
+
+An example of a simple realization of this project is given below. So far, the button click response has not been added to the JavaScript yet.
+
+```js
+"use strict";
+let firstNumber = 10;
+let secondNumber = 72;
+document.querySelector(".first-number").textContent = firstNumber;
+document.querySelector(".second-number").textContent = secondNumber;
+
+document.querySelector(".result").value = 82;
+let userResponse = Number(document.querySelector(".result").value);
+
+if (userResponse === firstNumber + secondNumber) {
+  document.querySelector(".message").textContent = "Well done!";
+} else {
+  document.querySelector(".message").textContent = "Wrong result!";
+}
+```
+
+To listen to the button click, an event listener is required. First locate the button using `querySelector`, then use `addEventListener` function that comes with the button to add an event as follows.
+
+```js
+document.querySelector(".btn-submit").addEventListener("click", function () {
+  userResponse = Number(document.querySelector(".result").value);
+  if (userResponse === firstNumber + secondNumber) {
+    document.querySelector(".message").textContent = "Well done!";
+    document.querySelector(".score").textContent++;
+  } else {
+    document.querySelector(".message").textContent = "Wrong result!";
+    document.querySelector(".score").textContent = 0;
+  }
+});
+```
+
+The style defined in CSS can also be overwritten by JavaScript, for example, using
+
+```js
+document.querySelector(".message").style.color = "green";
+```
+
+The style-related attributes are under `style` property of the element.
+
+The entire solution looks like the following. Notice that this is just a working version of the solution. It does not follow all the good practice in JavaScript programming. For example, there are duplicate codes in the example below. Use refactoring to identify and remove duplicate codes in practice.
+
+```js
+"use strict";
+let firstNumber = Math.trunc(99 * Math.random()) + 1;
+let secondNumber = Math.trunc(99 * Math.random()) + 1;
+document.querySelector(".first-number").textContent = firstNumber;
+document.querySelector(".second-number").textContent = secondNumber;
+
+let userResponse;
+
+document.querySelector(".btn-submit").addEventListener("click", function () {
+  userResponse = Number(document.querySelector(".result").value);
+  if (userResponse === firstNumber + secondNumber) {
+    document.querySelector(".message").textContent = "Well done!";
+    document.querySelector(".message").style.color = "green";
+    document.querySelector(".score").textContent++;
+    document.querySelector(".result").value = "";
+    firstNumber = Math.trunc(99 * Math.random()) + 1;
+    secondNumber = Math.trunc(99 * Math.random()) + 1;
+    document.querySelector(".first-number").textContent = firstNumber;
+    document.querySelector(".second-number").textContent = secondNumber;
+  } else {
+    document.querySelector(".message").textContent = "Wrong result!";
+    document.querySelector(".message").style.color = "red";
+    document.querySelector(".score").textContent = 0;
+  }
+});
+
+document
+  .querySelector(".btn-changequestion")
+  .addEventListener("click", function () {
+    document.querySelector(".message").textContent = "Question changed..";
+    document.querySelector(".message").style.color = "black";
+    if (document.querySelector(".score").textContent > 0) {
+      document.querySelector(".score").textContent--;
+    }
+    document.querySelector(".result").value = "";
+    firstNumber = Math.trunc(99 * Math.random()) + 1;
+    secondNumber = Math.trunc(99 * Math.random()) + 1;
+    document.querySelector(".first-number").textContent = firstNumber;
+    document.querySelector(".second-number").textContent = secondNumber;
+  });
+```
+
+## Simple Example 2: Pop-up UI
+
+The web page shall have a few buttons. Clicking a button will pop up its associated message window. The message window can be closed either by clicking the "x" mark on the message window, using "Esc" on the keyboard, or simply click anywhere else on the original web page.
+
+This example demonstrates the use of message pop-up, a widely appreciated feature of almost all websites.
+
+In an application like this, the design of the message box, such as its size, its transparency when opened, etc., matters a lot to the user experience. These parameters are often not hard-coded in the JavaScript, but predefined in the CSS. JavaScript just activates different "mode" of the message window at different time. Similarly, neither content of the message is card-coded in the JavaScript. They are given in the HTML file, and are put into a code block set `display=false` by default.
+
+In this example, only the JavaScript is given. All the elements to be called in the JavaScript is pre-assigned to variables, as given below. In this example, 3 buttons and 2 message boxes are defined. Clicking the first and second button would trigger the first message box, and last button the second message box.
+
+```js
+const modal12 = document.querySelector(".modal12");
+const modal3 = document.querySelector(".modal3");
+const overlay = document.querySelector(".overlay");
+const btnCloseModal = document.querySelector(".close-modal");
+const btnsOpenModal = document.querySelectorAll(".show-modal");
+const btnsOpenModel12 = document.querySelectorAll(".show-modal12");
+const btnOpenModel3 = document.querySelector(".show-modal3");
+```
+
+```mermaid
+  graph TD;
+    button1 --> modal12;
+    button2 --> modal12;
+    button3 --> modal3;
+```
+
+The explanation to the classes is given below. Notice that one element may have multiple classes assigned to it. In that case, use `class = "class_name_1 class_name_2"`, where the multiple classes names are separated by white spaces.
+
+| Class Name    | Explanation                                                                                                                    |
+| :------------ | :----------------------------------------------------------------------------------------------------------------------------- |
+| `modal`       | A box that contains the pop-up message, as well as the "x" button to close the message box. There are 3 modals in the example. |
+| `overlay`     | A full-screen half-transparent box that is used to cover the entire background of the web page when the message box pops up.   |
+| `close-modal` | The close "x" button on `modal` windows.                                                                                       |
+| `show-modal`  | The buttons, clicking which would pop up the message box.                                                                      |
+| `hidden`      | The `hidden` tag is assigned to `modal` and `overlay` as well, i.e., two classes assigned to one element.                      |
+
+The objective of the JavaScript is to change the style of the above items when different events happen. To make an item disappear, just add `hidden` to the item. To make it re-appear, remove `hidden`.
+
+For example, the following JavaScript removes `hidden` class tag from the `overlay` upon any of the 3 buttons is clicked. The built-in function `.classList.remove()` of an element is used to remove a class tag. By doing the below, when a button is clicked, the full-screen half-transparent box would pop up to shield the background of the web page. Using the similar method, the message boxes are popped up consequently.
+
+```js
+for (let i = 0; i < btnsOpenModal.length; i++) {
+  btnsOpenModal[i].addEventListener("click", function () {
+    overlay.classList.remove("hidden");
+  });
+}
+
+for (let i = 0; i < btnsOpenModel12.length; i++) {
+  btnsOpenModel12[i].addEventListener("click", function () {
+    modal12.classList.remove("hidden");
+  });
+}
+
+btnOpenModel3.addEventListener("click", function () {
+  modal3.classList.remove("hidden");
+});
+```
+
+When the close "x" botton is clicked, the above should be reverted as follows.
+
 # Appendix
 
 ## Brief Introduction to HTML
@@ -773,7 +1046,7 @@ HTML uses classes and IDs to name elements. The name can later be used to select
 </form>
 ```
 
-## CSS
+## Brief Introduction to CSS
 
 Cascading Style Sheets is a programming language that is often integrated into the HTML file HEAD section, which determines the styles and presentations of the web page. An example is given below.
 
@@ -830,6 +1103,7 @@ Then replace the HTML with
   </head>
   <body>
     <h1>This is the h1 heading</h1>
+    <h2>This is the h2 heading outside the box.</h2>
     <p>
       This is a link to
       <a href="https://www.google.com">google</a>.
@@ -843,7 +1117,7 @@ Then replace the HTML with
     <p class="first-paragraph">This is the first paragraph.</p>
     <p class="second-paragraph">This is the second paragraph.</p>
     <form id="your-name">
-      <h2>Registration</h2>
+      <h2>This is the h2 heading inside the box</h2>
       <p>Input your name here:</p>
       <input type="text" placeholder="Your Name" />
       <button>Confirm</button>
@@ -853,3 +1127,116 @@ Then replace the HTML with
 ```
 
 It should work all the same as the inline formulation.
+
+CSS take all the component in an HTML file as "elements". Some of the elements are assigned with class name and ID, for example, `first-paragraph`, `your-name`, in the above example. CSS can select an element, and apply properties to it to modify its presentation styles such as background color, font size, margin size, padding size, etc. An example is given below.
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(218, 218, 184);
+  font-family: Arial;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+.first-paragraph {
+  color: red;
+}
+
+#your-name {
+  background-color: yellow;
+  border: 5px solid red;
+}
+```
+
+In the above example, there are 5 elements selected and configured one at a time, including:
+
+- `*`: all elements
+
+- `body`: HTML body section; notice that the font-family property is automatically inherited to all sub elements defined inside body, unless otherwise specified
+
+- `h1`: h1 heading
+
+- `.<class>`: elements with the specified class name, in the example "first-paragraph"
+
+- `#<id>`: the element with the specified id, in the example "your-name"
+
+A slightly more complicated CSS example is given below. It works similarly with the above example.
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(218, 218, 184);
+  font-family: Arial;
+  font-size: 20px;
+  padding: 50px;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
+img {
+  width: 150px;
+  height: 25px;
+}
+
+.first-paragraph {
+  color: red;
+}
+
+#your-name {
+  background-color: yellow;
+  border: 5px solid red;
+  width: 400px;
+  padding: 30px;
+  margin-top: 20px;
+}
+
+input,
+button {
+  padding: 10px;
+}
+
+#your-name h2 {
+  color: white;
+}
+```
+
+Notice that as shown above, to specify multiple elements at the same time, use
+
+```css
+<element-1>, <element-2>, {
+  properties;
+}
+```
+
+To specify an element inside an element (child to an element), use
+
+```css
+<element-root> <element-child> {
+  properties;
+}
+```

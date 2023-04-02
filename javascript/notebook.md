@@ -995,6 +995,47 @@ btnOpenModel3.addEventListener("click", function () {
 
 When the close "x" botton is clicked, the above should be reverted as follows.
 
+```js
+btnCloseModal.addEventListener("click", function () {
+  modal12.classList.add("hidden");
+  modal3.classList.add("hidden");
+  overlay.classList.add("hidden");
+});
+```
+
+The same applies to the case where the overlay is clicked. Hence,
+
+```js
+overlay.addEventListener("click", function () {
+  modal12.classList.add("hidden");
+  modal3.classList.add("hidden");
+  overlay.classList.add("hidden");
+});
+```
+
+To make the code more readable, consider defining a function to contain the repeating contents as follows.
+
+```js
+const hideEverything = function () {
+  modal12.classList.add("hidden");
+  modal3.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+btnCloseModal.addEventListener("click", hideEverything); // pass the function as an expression, i.e., use hideEverything instead of hideEverything()
+overlay.addEventListener("click", hideEverything);
+```
+
+To listen to key press, which is a global event rather than a local event applied to specific elements, use `document` to listen to the event as follows.
+```js
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    hideEverything();
+  };
+});
+```
+where `keydown` specifies the event type where a key is pressed down, and `e` is the event object which the browser would pass to the function, inside which includes information about which key is pressed down.
+
+
 # Appendix
 
 ## Brief Introduction to HTML

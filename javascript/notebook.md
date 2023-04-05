@@ -1035,6 +1035,91 @@ document.addEventListener("keydown", function (e) {
 ```
 where `keydown` specifies the event type where a key is pressed down, and `e` is the event object which the browser would pass to the function, inside which includes information about which key is pressed down.
 
+# JavaScript Insights
+
+JavaScript as a programming language has the following features:
+
+- High-level, garbage-collected
+  > The "high-level" refers to the fact that comparing with C language as a benchmark, when programming with JavaScript, the developer does not need to particularly care about how the hardware resources are used, especially how computer memory is managed.
+  >
+  > High-level programming languages such as JavaScript and Python are usually easier to manage when comes to realizing complicated functions. On the other hand, however, they are usually less efficient and slower than a middle-level language or low-level language such as C language.
+  >
+  > One of the reasons making JavaScript possible to manage the computer memory automatically is the garbage-collection feature. It automatically checks the memory usage and recycles those taken up by variables no longer to be used in the future.
+- Prototype-based and object-oriented
+  > Almost everything in JavaScript is an object, and can be manipulated via its attributes and functions.
+- Multi-paradigm
+  > "Paradigm" refers to the approach and mindset of structuring code. Examples of paradigms include procedural programming, object-oriented programming, functional programming, etc. JavaScript supports multiple paradigms and their mixtures.
+- Interpreted or just-in-time compiled
+  > Computer programming languages needs to be ultimately compiled into machine codes so that it can be executed by the processor. There are two types of software that can execute programs, the compiler and the interpreter. A compiler translates the entire program into machine codes which can be executed by the processor. The execution can happen after the compilation. The interpreter, on the other hand, executes the codes line-by-line. A line of code is executed immediately after it is interpreted.
+  > 
+  > Compiler is faster, but less flexible since any change in the code or the platform that runs the code would call for recompiling, while interpreter is significantly slower but more flexible and portable.
+  >
+  > JavaScript uses "just-in-time compiled" techniques. The code is parsed and translated into AST, then compiled into executable machine code. This compiled code can be low-efficient in the beginning. While the code is being executed, it is again and again re-compiled in order to gain high efficiency.
+  > ```mermaid
+  > graph TD;
+  >    A[Source Code] --Parsing--> B[JavaScript AST];
+  >    B --Compiling--> C[Machine Code];
+  >    C --Optimization-->B;
+  > ```
+- Dynamic
+  > Variables are dynamically typed and changed. In contrast, many other languages are strongly typed, which reduces the chance of generating bugs, but can be less convenient sometimes.
+- Single-threaded, equipped with non-blocking event loop concurrency model 
+  > JavaScript runs on single thread, and it can do only one thing at a time. When there is a long-running task, JavaScript uses "event loop" that allows the code to run in the background, and once its finished put it back to the main thread.
+- First-class functions
+  > Functions in JavaScript can be treated as variables, and can be passed to other functions or return from other functions as arguments. This makes functional programming paradigm possible and adds flexibility to the programming.
+
+Understanding the above features helps to better comprehend JavaScript.
+
+## JavaScript Engine and Runtime
+
+Each browser has its JavaScript engine. An example is Google V8, a free and open-source JavaScript engine developed by the Chromium project.
+
+A JavaScript engine contains a call stack and a heap. Call stack refers to the place where the code is executed, and heap where the objects are stored. Modern JavaScript engine uses just-in-time compiled techniques to speed up the execution of the code. 
+
+In addition to JavaScript engine, a JavaScript runtime also contains WEB APIs (provided by the browser that allows JavaScript to interact with the web window objects) and callback queues. Callback queues handles the event listeners using event loop.
+
+## Execution Context
+
+An execution context is the environment where a block of function is executed. Each JavaScript code has one and only one a global execution context, where the top-level code (code not in any function) is executed.
+
+Each and every function call also has its own execution context. When the function executes, an execution context is created by requirement.
+
+Each execution context has the variable environment, inside which is the variables and functions declared in this execution context, and also the argument variables (input, output variables) linking to outside. It also has a scope chain which is used to refer to outside variables. It also has a `this` keyword used to refer to itself. The variable environment, scope chain, and `this` keyword are created in the **creation phase** right before execution. If a variable in the execution context is an output of another function, its value is put into `<unknown>` until that function is executed.
+
+For all the functions nested together, their execution context is put into the call stack of the JavaScript engine, with the global execution context being the "root" in the bottom of the stack. When a function finishes, its execution context is popped and removed from the call stack.
+
+## Scoping
+
+Scoping manages how the variables are organized and accessed. The "scope" refers to the space where a variable is declared. There are the global scope, the function scope, and the block scope. The "scope variable" refers to the variables accessible from a scope. Notice that "scope" and "scope variable" may differ slightly.
+
+The scope of a variable decides how it can be accessed.
+- Variables/functions defined in the global scope can be accessed everywhere, hence, global variables.
+- Variables/functions defined in the function scope (also known as local scope) can be accessed only within that function.
+- Starting from JavaScript ES6, every curly brackets pairs define a block, where variables/functions defined in the block scope can be accessed only within that code block. This only applies to the variables/functions defined in the code block by `let` or `const`. Variables declared using `var` is not scoped under the current block, but rather its parent function block (`let` and `const` are block-scoped, while `var` is function-scoped).
+
+The code can access the variables defined in its current scope, as well as in its parent scopes. The scope chain is used to trace the variables in its parent scopes, for variable look up. 
+
+## Hoisting
+
+Hoisting refers to the phenomenon where an variable or a function can be used before declaration. For example, sometimes the functions are collectively declared in the bottom of the script but used in the main body of the script.
+
+In JavaScript, hoisting is supported to certain declaration of variables and functions. If an item is created in the creation phase of the execution context, then it benefits from hoisting. Details are summarized below.
+
+| Function/Variable                 | Is Hoisted? | Value Before Declaration | Scope Type                                        |
+| :-------------------------------- | :---------- | :----------------------- | :------------------------------------------------ |
+| function decoration               | yes         | actual function          | block (in strict mode), function (in sloppy mode) |
+| `var` declared variable           | yes         | undefined                | function                                          |
+| `let` / `const` declared variable | no          | uninitialized/TDZ        | block                                             |
+| function expression               | depends     | depends                  | depends                                           |
+| function arrow                    | depends     | depends                  | depends                                           |
+
+Function expression and function arrow play like a variable. Their hoisting status, values before declaration and scope types depend on the declaration variable, i.e., either `var` or `let`/`const`. In whichever the case, function expression and arrow cannot be used before declaration, while function decoration can be used before declaration. Nevertheless, it is always a good practice to declare variables and functions before using them.
+
+## `this` Keyword
+
+In JavaScript, `this` refers to different things depending on what the current execution context is and how `this` is used. For example, if it is used in a method (NOT for arrow function; hence, it is not recommended to use arrow function to define a method of an object, just to reduce risk) of an object, `this` refers to the object that calls the method (NOT necessarily where the method is defined). If it is used in the event listener, `this` refers to the DOM element that the handler is attached to, for example, the button. In a function arrow, `this` inherits its parent execution context.
+
+When defining a function inside a method and use `this` in the second-layer nested function, `this` would become `undefined` in the second-layer nested function. This is because the nested function is considered an independent regular function call (as if it has nothing with the object), and `this` in such a regular function call is always `undefined`.
 
 # Appendix
 

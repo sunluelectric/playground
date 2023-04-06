@@ -1115,11 +1115,161 @@ In JavaScript, hoisting is supported to certain declaration of variables and fun
 
 Function expression and function arrow play like a variable. Their hoisting status, values before declaration and scope types depend on the declaration variable, i.e., either `var` or `let`/`const`. In whichever the case, function expression and arrow cannot be used before declaration, while function decoration can be used before declaration. Nevertheless, it is always a good practice to declare variables and functions before using them.
 
-## `this` Keyword
+## `this` Keyword and `arguments` Keyword
 
-In JavaScript, `this` refers to different things depending on what the current execution context is and how `this` is used. For example, if it is used in a method (NOT for arrow function; hence, it is not recommended to use arrow function to define a method of an object, just to reduce risk) of an object, `this` refers to the object that calls the method (NOT necessarily where the method is defined). If it is used in the event listener, `this` refers to the DOM element that the handler is attached to, for example, the button. In a function arrow, `this` inherits its parent execution context.
+In JavaScript, `this` refers to different things depending on what the current execution context is and how `this` is used. For example, if it is used in a method (NOT for arrow functions; hence, it is not recommended to use arrow function to define a method of an object, just to reduce risk) of an object, `this` refers to the object that calls the method (NOT necessarily where the method is defined). If it is used in the event listener, `this` refers to the DOM element that the handler is attached to, for example, the button. In a function arrow, `this` inherits its parent execution context.
 
 When defining a function inside a method and use `this` in the second-layer nested function, `this` would become `undefined` in the second-layer nested function. This is because the nested function is considered an independent regular function call (as if it has nothing with the object), and `this` in such a regular function call is always `undefined`.
+
+The `arguments` keyword can be used in a regular function. The `arguments` contains all the input arguments sent as the input to the function. It can have dynamic length. The `arguments` keyword provides one of the many ways to handle dynamic length of arguments.
+
+## Primitives VS Objects
+
+Primitives refer to the basic and simple data types, for example, a numeric number. JavaScript primitives include number, string, boolean, undefined, null, symbol and bigint.
+
+Objects, on the other hand, are comprehensive data types that may have its own attributes and methods structured in a specified way by the developer. Everything other than primitives are objects, including object literal, array, function, and many more.
+
+Primitives and objects are stored and managed differently. For example, primitive types are stored in the call stack, while objects (reference types) in the heap. When there are multiple tags pointing to the same reference type variable, changing the object from one entrance would affect the rest. An example is given below.
+
+```js
+const x = {
+  subject: 'mathematics',
+  score: 90
+}; // x is a reference type
+const y = x; // this is not a true copy; both y and x points to the same reference type variable
+y.score = 95; // this affects x as well
+x.score // 95, not 90
+```
+
+This also explains why `y.score` can be modified regardless that `const` is used to decorate `y`. In memory, the call stack value of `y` remains unchanged. Only its referenced object in the heap is changed. With that been said,`x` and `y` cannot be changed to refer to a different object whose address in the heap is different. This means that they cannot be assigned to a new object, which often has its own address in the heap upon creation, i.e.,
+```js
+const x = {
+  subject: 'mathematics',
+  score: 90
+}
+x = {
+  dayOfWeek: 2,
+  dayOfWeekName: 'Monday',
+  msg: 'Good Monday!'
+} // error
+```
+
+In contrast, there is no associated referenced value in heap for a primitive variable. The same would not happen to primitive types. A primitive type defined by `const` is immutable. 
+```js
+let x = 90;
+let y = x;
+y = 95;
+x // 90
+const z = 98;
+z = 100; // error
+```
+
+One way to "truly" copy an object is to create a new project and assign attributes to the new object using the values collected from the original object. A shallow object copy can be done as follows.
+
+```js
+newObject = Object.assign({}, oldObject);
+```
+
+A deep copy can be done using third-party toolboxes, which will be introduced in later sections.
+
+# Modern JavaScript
+
+## Array Destruction
+
+It has been introduced previously the basics operations of an array. As a review, an example is given below.
+
+```js
+const x = [1,2,3,'John',5]; // declaration of array; [] for empty array and [<scalar>] for array with single value
+x.length // access length of array
+x[0] // access items inside array using index
+x[0] = 100; // modify items inside array using index
+x.push(6); // add item to the end
+x.unshift(-1); // add item to the beginning
+x.indexOf(3) // search and return index
+x.include(3) // check if included
+```
+
+More advanced topics are introduced in this section.
+
+JavaScript automatically destruct an array and assign its elements to individual variables in the following scenario. See example below.
+```js
+const arr = [1,2,3];
+const a = arr[0]; // conventional way, a = 1
+const b = arr[1]; // conventional way, b = 2
+const c = arr[3]; // conventional way, c = 3
+const [x, y, z] = arr; // x = 1, y = 2, z = 3, equivalent to above
+const [d, e] = arr; // d = 1, e = 2
+const [f, , g] = arr; // f = 1, g = 3
+```
+With array destruction, swap variables as follows, without introducing a temporary variable.
+```js
+let a = 1;
+let b = 2;
+[b, a] = [a, b];
+```
+
+If a function returns multiple values in an array, it can be immediately destructed. This is essentially how a function returns multiple variables. See example below.
+```js
+const [x, ,y] = threeOutput();
+function threeOutput() {
+  let a = 1;
+  let b = 2;
+  let c = 3;
+  return [a, b, c] // return an array
+}
+x // x = 1
+y // y = 3
+```
+
+Nested array can be destructed as follows.
+
+## Object Destruction
+
+Similar with array destruction where a selected set of items in the array is assigned to new separate variables, attributes in an object can be assigned to new separate variables as well using object destruction. See examples below.
+
+```js
+const x = {
+  subject: 'mathematics',
+  scoreSec1: 28,
+  scoreSec2: 67,
+  scoreTotal: 95,
+  isAboveAverage: true
+};
+const {scoreSec1, scoreSec2} = x; // match the attribute name; if not exist, return undefine
+const {scoreSec1: firstPartScore, scoreSec2: secondPartScore} = x; // with rename;
+const {scoreSec1: firstPartScore = 0, scoreSec2: secondPartScore = 0, scoreAverage: scoreAverageOfClass = [], isPersonalBest = false} = x; // with default value
+```
+
+Notice that if the variables has been declared in the execution context, the above would not work. An example is given below.
+
+```js
+const c = {a: 1, b: 2};
+let {a, b} = c; // this works
+```
+but
+```js
+let a, b;
+const c = {a: 1, b: 2};
+{a, b} = c; // this would not work
+```
+
+This is because with `a` and `b` defined expressions, JavaScript would expect `{a, b}` to be a code block, not an object. To make it work, use
+```js
+let a, b;
+const c = {a: 1, b: 2};
+({a, b} = c); // this works
+```
+
+
+
+
+
+
+
+
+
+
+
 
 # Appendix
 

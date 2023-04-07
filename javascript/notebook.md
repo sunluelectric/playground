@@ -1222,6 +1222,11 @@ y // y = 3
 ```
 
 Nested array can be destructed as follows.
+```js
+const x = [1,2];
+const y = [x, 3];
+const [[a, b], c] = y;
+```
 
 ## Object Destruction
 
@@ -1260,6 +1265,7 @@ const c = {a: 1, b: 2};
 ({a, b} = c); // this works
 ```
 
+Nested object can be deconstructed similarly as the array.
 
 
 
